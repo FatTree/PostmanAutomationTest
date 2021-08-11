@@ -44,7 +44,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"clientName\": \"Athem\",\r\n   \"clientEmail\": \"Athem.lin@example.com\"\r\n}",
+					"raw": "{\r\n   \"clientName\": \"AthemLin\",\r\n   \"clientEmail\": \"Athem@example.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -74,11 +74,8 @@
 							"pm.test(\"Status is 201\", () => {\r",
 							"    pm.expect(pm.response.code).to.eql(201);\r",
 							"    const resJson = pm.response.json();\r",
-							"    pm.globals.set(\"orderId\", resJson.orderId);\r",
+							"    pm.environment.set(\"orderId\", resJson.orderId);\r",
 							"});\r",
-							"\r",
-							"\r",
-							"\r",
 							""
 						],
 						"type": "text/javascript"
@@ -91,7 +88,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{accessToken\n}}",
+							"value": "{{accessToken}}",
 							"type": "string"
 						}
 					]
@@ -100,7 +97,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"bookId\": \"{{bookId}}\",\r\n  \"customerName\": \"{{customerName}}\"\r\n}",
+					"raw": "{\r\n  \"bookId\": \"4\",\r\n  \"customerName\": \"{{$randomLastName}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -129,6 +126,11 @@
 						"exec": [
 							"pm.test(\"Status is 200\", () => {\r",
 							"    pm.expect(pm.response.code).to.eql(200)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Customer Name is NOT Athem\", () => {\r",
+							"    const customerName = pm.response.json().customerName;\r",
+							"    pm.expect(customerName).not.to.be.eql(\"Athem\")\r",
 							"})"
 						],
 						"type": "text/javascript"
@@ -144,7 +146,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{accessToken\n}}",
+							"value": "{{accessToken}}",
 							"type": "string"
 						}
 					]
@@ -161,19 +163,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/orders/:orderId",
+					"raw": "{{baseUrl}}/orders/{{orderId}}",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"orders",
-						":orderId"
-					],
-					"variable": [
-						{
-							"key": "orderId",
-							"value": "{{orderId}}"
-						}
+						"{{orderId}}"
 					]
 				}
 			},
@@ -188,8 +184,11 @@
 						"exec": [
 							"pm.test(\"Status is 204\", () => {\r",
 							"    pm.expect(pm.response.code).to.eql(204);\r",
-							"    pm.globals.set(\"customerName\", pm.globals.get(\"customerName\"));\r",
-							"});"
+							"    \r",
+							"    // pm.environment.set(\"customerName\", JSON.parse(pm.request.body.raw).customerName);\r",
+							"\r",
+							"});\r",
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -201,7 +200,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{accessToken\n}}",
+							"value": "{{accessToken}}",
 							"type": "string"
 						}
 					]
@@ -210,7 +209,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"customerName\": \"{{$randomLastName}}\"\r\n}",
+					"raw": "{\r\n  \"customerName\": \"Athem\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -218,19 +217,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/orders/:orderId",
+					"raw": "{{baseUrl}}/orders/{{orderId}}",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"orders",
-						":orderId"
-					],
-					"variable": [
-						{
-							"key": "orderId",
-							"value": "{{orderId}}"
-						}
+						"{{orderId}}"
 					]
 				}
 			},
@@ -260,7 +253,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{accessToken\n}}",
+							"value": "{{accessToken}}",
 							"type": "string"
 						}
 					]
@@ -297,7 +290,9 @@
 						"exec": [
 							"pm.test(\"Status is 204\", () => {\r",
 							"    pm.expect(pm.response.code).to.eql(204);\r",
-							"});"
+							"});\r",
+							"\r",
+							"// pm.environment.clear(\"orderId\")"
 						],
 						"type": "text/javascript"
 					}
@@ -309,7 +304,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{accessToken\n}}",
+							"value": "{{accessToken}}",
 							"type": "string"
 						}
 					]
@@ -332,19 +327,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/orders/:orderId",
+					"raw": "{{baseUrl}}/orders/{{orderId}}",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"orders",
-						":orderId"
-					],
-					"variable": [
-						{
-							"key": "orderId",
-							"value": "{{orderId}}"
-						}
+						"{{orderId}}"
 					]
 				}
 			},
